@@ -14,6 +14,7 @@ export function getLocalStorage(key:string) {
 export function setLocalStorage(key:string, data:any) {
   localStorage.setItem(key, JSON.stringify(data));
 }
+
 // set a listener for both touchend and click
 interface ClickHandler {
   (e:Event):void;
