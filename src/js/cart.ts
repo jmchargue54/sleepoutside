@@ -1,11 +1,20 @@
-import { getLocalStorage } from "./utils.mjs";
-import type { Product } from "./types.mjs";
+import { getLocalStorage } from "./utils.mts";
+import type { Product } from "./types.mts";
 
 function renderCartContents() {
-  const cartItems = getLocalStorage("so-cart");
-  const htmlItems = cartItems.map((item: Product) => cartItemTemplate(item));
+  if (!localStorage.getItem("so-cart")) {
+    localStorage.setItem("so-cart", "[]");
+  }
+  const cartItems = getLocalStorage("so-cart") || [];
   const listEl = document.querySelector(".product-list");
-  if (listEl) listEl.innerHTML = htmlItems.join("");
+  if (cartItems.length === 0) {
+    if (listEl) listEl.innerHTML = "<li>Your cart is empty.</li>";
+    return;
+  } else {
+    console.log(cartItems);
+    const htmlItems = cartItems.map((item: Product) => cartItemTemplate(item));
+    if (listEl) listEl.innerHTML = htmlItems.join("");
+  }
 }
 
 function cartItemTemplate(item: Product) {
@@ -27,4 +36,4 @@ function cartItemTemplate(item: Product) {
   return newItem;
 }
 
-renderCartContents();
+document.addEventListener("DOMContentLoaded", renderCartContents);
